@@ -3,6 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../contexts/AuthContext';
 import { API_ENDPOINTS } from '../config/api';
 
+const FAKE_SUBMISSIONS = Array.from({ length: 15 }, (_, i) => ({
+  id: i + 1,
+  problemTitle: `Problem ${i + 1}`,
+  language: i % 2 === 0 ? 'javascript' : 'python',
+  status: i % 3 === 0 ? 'accepted' : 'wrong_answer',
+  runtimeMs: 10 + i,
+  memoryKb: 15000 + i * 100,
+  submittedAt: new Date(Date.now() - i * 3600000).toISOString(),
+}));
+
+
 function SubmissionHistory() {
   const navigate = useNavigate();
   const [submissions, setSubmissions] = useState([]);
@@ -31,6 +42,12 @@ function SubmissionHistory() {
     try {
       setLoading(true);
       setError(null);
+          if (import.meta.env.VITE_USE_FAKE_SUBMISSIONS === 'true') {
+      // simulate network delay
+      await new Promise((r) => setTimeout(r, 300));
+      setSubmissions(FAKE_SUBMISSIONS);
+      return;
+    }
       const response = await api.get(API_ENDPOINTS.SUBMISSIONS);
       setSubmissions(response.data);
     } catch (err) {

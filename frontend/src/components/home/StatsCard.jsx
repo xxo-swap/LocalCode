@@ -7,18 +7,18 @@ import Card from '../common/Card';
  */
 function StatsCard({ title, value, icon, className = '' }) {
   return (
-    <Card className={`text-center ${className}`}>
+    <Card className={`text-center card ${className}`}>
       {icon && (
         <div className="flex justify-center mb-3">
-          <div className="text-amber-400 text-3xl">
+          <div className="text-neutral-content text-3xl">
             {icon}
           </div>
         </div>
       )}
-      <h3 className="text-slate-400 text-sm font-sans uppercase tracking-wide mb-2">
+      <h3 className="text-neutral font-bold cursor-move text-sm font-sans uppercase tracking-wide mb-2">
         {title}
       </h3>
-      <p className="text-4xl font-bold text-slate-50 font-sans">
+      <p className="text-4xl font-bold text-nuetral-content font-sans">
         {value !== undefined && value !== null ? value : '—'}
       </p>
     </Card>
