@@ -23,7 +23,7 @@ function Dashboard() {
     try {
       setLoading(true);
       setError(null);
-      if (import.meta.env.VITE_USE_FAKE_DASHBOARD === "true") {
+      if (true) {
         await new Promise((r) => setTimeout(r, 600));
         setStats(FAKE_STATS);
         setRecentSubmissions([
