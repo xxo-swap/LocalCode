@@ -114,7 +114,7 @@ function ProblemList() {
       setLoading(true);
       setError(null);
 
-      if (import.meta.env.VITE_USE_FAKE_PROBLEMS === "true") {
+      if (true) {
         // simulate network delay
         await new Promise((r) => setTimeout(r, 300));
 
