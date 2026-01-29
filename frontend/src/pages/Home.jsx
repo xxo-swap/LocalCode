@@ -53,7 +53,7 @@ function Home() {
       try {
         let statsData;
 
-        if (import.meta.env.VITE_USE_FAKE_HOME_STATS === "true") {
+        if ( "true") {
           await new Promise((r) => setTimeout(r, 300));
           statsData = FAKE_HOME_STATS;
         } else {
