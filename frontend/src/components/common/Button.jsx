@@ -12,16 +12,13 @@ function Button({
   className = '',
   ...props 
 }) {
-  // 'btn' is the base DaisyUI class. 
-  // We remove the manual padding/rounded classes because DaisyUI handles them.
   const baseStyles = 'btn transition-all duration-200';
   
   const variants = {
-    // DaisyUI variants map directly to these classes
     primary: 'btn-primary', 
     secondary: 'btn-secondary',
     outline: 'btn-outline',
-    danger: 'btn-error', // 'error' is the standard DaisyUI semantic name for danger
+    danger: 'btn-error', 
   };
 
   return (

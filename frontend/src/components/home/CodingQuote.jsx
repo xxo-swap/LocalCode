@@ -16,7 +16,7 @@ function CodingQuote() {
   if (!quote) return null;
 
   return (
-    <Card className="text-center ">
+    <Card hover="true" className="text-center ">
       <div className="flex flex-col items-center gap-4">
         {/* The Quote Text */}
         <p className="text-xl md:text-2xl italic leading-relaxed text-base-content font-serif">

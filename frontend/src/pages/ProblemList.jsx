@@ -74,6 +74,7 @@ function ProblemList() {
     searchParams.get("tags")?.split(",").filter(Boolean) || []
   );
   const [sortBy, setSortBy] = useState(searchParams.get("sort") || null);
+  const [sortOrder, setSortOrder] = useState("asc");
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(
@@ -179,15 +180,35 @@ function ProblemList() {
     setCurrentPage(1);
   };
 
-  const handleSortChange = (value) => {
+  const handleSortChange = (value, order) => {
     setSortBy(value);
     setCurrentPage(1);
+    setSortOrder(order);
   };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  const sortedProblems = [...filteredProblems].sort((a, b) => {
+  if (!sortBy) return 0;
+
+  switch (sortBy) {
+    case "title":
+      return a.title.localeCompare(b.title);
+
+    case "difficulty":
+      return a.difficulty.localeCompare(b.difficulty);
+
+    case "acceptanceRate":
+      return (a.acceptanceRate ?? 0) - (b.acceptanceRate ?? 0);
+
+    default:
+      return 0;
+  }
+});
+
 
   if (loading) {
     return (
@@ -298,7 +319,7 @@ function ProblemList() {
               key: "difficulty",
               label: "Difficulty",
               sortable: true,
-              render: (row) => <DifficultyBadge difficulty={row.difficulty} />,
+              render: (row) => <DifficultyBadge difficulty={row.difficulty} outline={true} />,
             },
             {
               key: "tags",
@@ -307,7 +328,7 @@ function ProblemList() {
               render: (row) => (
                 <div className="flex gap-1 flex-wrap">
                   {row.tags.map((tag) => (
-                    <span key={tag} className="badge badge-outline text-xs">
+                    <span key={tag} className="badge badge-accent badge-outline text-xs">
                       {tag}
                     </span>
                   ))}
@@ -325,8 +346,9 @@ function ProblemList() {
             },
           ]}
           rowClick={(row) => navigate(`/problems/${row.id}`)}
-          rowData={filteredProblems}
+          rowData={sortedProblems}
           sortBy={sortBy}
+          sortOrder={sortOrder}
           onSortChange={handleSortChange}
           loading={loading}
         />

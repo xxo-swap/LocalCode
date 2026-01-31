@@ -3,6 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { getStats } from "../services/submissionService";
 import { CodingQuote, StatsCard, RecentSubmissions } from "../components/home";
 import { Link } from "react-router-dom";
+import Card from "../components/common/Card";
 
 const FAKE_HOME_STATS = {
   solvedProblems: 18,
@@ -91,23 +92,28 @@ function Home() {
         {isAuthenticated() && (
           <>
             {/* Stats */}
-            <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+           <div className="group card card-body bg-base-200">
+              <section className="stats  bg-base-300/50 border border-base-300 transition-all duration-300 group-hover:border-white stats-vertical lg:stats-horizontal w-full">
               <StatsCard
                 title="Problems Solved"
                 value={loading ? "—" : stats.solved}
                 icon="✓"
+                className="text-success"
               />
               <StatsCard
                 title="Total Submissions"
                 value={loading ? "—" : stats.submissions}
                 icon="📝"
+                className="text-secondary-content"
               />
               <StatsCard
                 title="Accuracy"
                 value={loading ? "—" : stats.accuracy}
                 icon="🎯"
+                className="text-info"
               />
             </section>
+           </div>
 
             {/* Recent Submissions */}
             <section className="">

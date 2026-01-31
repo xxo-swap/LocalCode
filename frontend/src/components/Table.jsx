@@ -13,17 +13,34 @@ import PropTypes from "prop-types";
  * rowClick: optional function(row)
  */
 // eslint-disable-next-line no-unused-vars
-function Table({ columns,  className = "", onSortChange, sortBy, rowClick , rowData , loading = false,}) {
-    
+function Table({
+  columns,
+  className = "",
+  onSortChange,
+  sortBy,
+  rowClick,
+  sortOrder,
+  rowData,
+  loading = false,
+}) {
   const handleSort = (columnKey) => {
-    if (onSortChange) onSortChange(columnKey === sortBy ? null : columnKey);
+    if (!onSortChange) return;
+
+    if (columnKey !== sortBy) {
+      // new column → default asc
+      onSortChange(columnKey, "asc");
+    } else {
+      // same column → toggle direction
+      onSortChange(columnKey, sortOrder === "asc" ? "desc" : "asc");
+    }
   };
 
   const getSortIcon = (columnKey) => {
     if (sortBy !== columnKey) {
+      // neutral icon
       return (
         <svg
-          className="w-4 h-4 opacity-50 inline-block ml-1"
+          className="w-4 h-4 opacity-40 ml-1"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -37,9 +54,11 @@ function Table({ columns,  className = "", onSortChange, sortBy, rowClick , rowD
         </svg>
       );
     }
-    return (
+
+    // active column → direction matters
+    return sortOrder === "asc" ? (
       <svg
-        className="w-4 h-4 text-primary inline-block ml-1"
+        className="w-4 h-4 text-primary ml-1"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -51,10 +70,24 @@ function Table({ columns,  className = "", onSortChange, sortBy, rowClick , rowD
           d="M5 15l7-7 7 7"
         />
       </svg>
+    ) : (
+      <svg
+        className="w-4 h-4 text-primary ml-1"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M19 9l-7 7-7-7"
+        />
+      </svg>
     );
   };
 
-    if (loading) {
+  if (loading) {
     return (
       <div className="flex justify-center py-12">
         <span className="loading loading-spinner loading-md" />
@@ -88,7 +121,10 @@ function Table({ columns,  className = "", onSortChange, sortBy, rowClick , rowD
         <tbody>
           {rowData.length === 0 ? (
             <tr>
-              <td colSpan={columns.length} className="text-center py-6 opacity-50">
+              <td
+                colSpan={columns.length}
+                className="text-center py-6 opacity-50"
+              >
                 No data available.
               </td>
             </tr>
@@ -97,7 +133,11 @@ function Table({ columns,  className = "", onSortChange, sortBy, rowClick , rowD
               <tr
                 key={idx}
                 onClick={rowClick ? () => rowClick(row) : undefined}
-                className={rowClick ? "cursor-pointer hover:bg-base-300 transition-colors" : ""}
+                className={
+                  rowClick
+                    ? "cursor-pointer hover:bg-base-300 transition-colors"
+                    : ""
+                }
               >
                 {columns.map((col) => (
                   <td key={col.key} className="px-4 py-3">
@@ -124,13 +164,12 @@ Table.propTypes = {
   ).isRequired,
 
   rowData: PropTypes.arrayOf(PropTypes.object).isRequired,
-
+  sortOrder: PropTypes.oneOf(["asc", "desc"]),
   className: PropTypes.string,
   onSortChange: PropTypes.func,
   sortBy: PropTypes.string, // can be null
   rowClick: PropTypes.func,
   loading: PropTypes.bool,
 };
-
 
 export default Table;
